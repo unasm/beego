@@ -200,6 +200,7 @@ func filterTreeWithPrefix(t *Tree, wildcards []string, reg string) {
 }
 
 // AddRouter call addseg function
+// runObject	controllerInfo 的实体
 func (t *Tree) AddRouter(pattern string, runObject interface{}) {
 	t.addseg(splitPath(pattern), runObject, nil, "")
 }
@@ -232,6 +233,7 @@ func (t *Tree) addseg(segments []string, route interface{}, wildcards []string, 
 			regexpStr = "(.+)"
 		}
 		if iswild {
+			//如果 uri 存在一对多的情况的下，相应的响应 func 也会是一个树状结构
 			if t.wildcard == nil {
 				t.wildcard = NewTree()
 			}
@@ -265,6 +267,7 @@ func (t *Tree) addseg(segments []string, route interface{}, wildcards []string, 
 			}
 			t.wildcard.addseg(segments[1:], route, append(wildcards, params...), reg+regexpStr)
 		} else {
+			//确定是只有一个节点的话，就在t的基础上追加一个节点
 			var subTree *Tree
 			for _, sub := range t.fixrouters {
 				if sub.prefix == seg {

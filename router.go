@@ -113,6 +113,8 @@ type controllerInfo struct {
 
 // ControllerRegister containers registered router rules, controller handlers and filters.
 type ControllerRegister struct {
+	//string 这里的string 存储的是post,get,put 这些请求方式，tree
+	//应该是根据具体的响应方式找到对应的处理方法
 	routers      map[string]*Tree
 	enableFilter bool
 	filters      [FinishRouter + 1][]*FilterRouter
@@ -155,6 +157,7 @@ func (p *ControllerRegister) Add(pattern string, c ControllerInterface, mappingM
 			for _, m := range comma {
 				if _, ok := HTTPMETHOD[strings.ToUpper(m)]; m == "*" || ok {
 					if val := reflectVal.MethodByName(colon[1]); val.IsValid() {
+						//methods['post'] = List ，请求对应的方法
 						methods[strings.ToUpper(m)] = colon[1]
 					} else {
 						panic("'" + colon[1] + "' method doesn't exist in the controller " + t.Name())
@@ -196,6 +199,7 @@ func (p *ControllerRegister) addToRouter(method, pattern string, r *controllerIn
 		t.AddRouter(pattern, r)
 	} else {
 		t := NewTree()
+		//pattern	/uri/list 这种
 		t.AddRouter(pattern, r)
 		p.routers[method] = t
 	}
