@@ -22,6 +22,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"security/lib/trace"
 	"strconv"
 	"strings"
 	"sync"
@@ -616,7 +617,10 @@ func (p *ControllerRegister) execFilter(context *beecontext.Context, urlPath str
 	return false
 }
 
-// Implement http.Handler interface.
+/*
+	每次请求都会调用的函数
+	Implement http.Handler interface.
+*/
 func (p *ControllerRegister) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	startTime := time.Now()
 	var (
@@ -640,6 +644,7 @@ func (p *ControllerRegister) ServeHTTP(rw http.ResponseWriter, r *http.Request) 
 
 	var urlPath = r.URL.Path
 
+	trace.Info("serverHttp_ ", urlPath)
 	if !BConfig.RouterCaseSensitive {
 		urlPath = strings.ToLower(urlPath)
 	}
@@ -783,6 +788,7 @@ func (p *ControllerRegister) ServeHTTP(rw http.ResponseWriter, r *http.Request) 
 			case "OPTIONS":
 				execController.Options()
 			default:
+				//是否绑定过func,没有的话，绑定
 				if !execController.HandlerFunc(runMethod) {
 					var in []reflect.Value
 					method := vc.MethodByName(runMethod)

@@ -32,6 +32,9 @@ import (
 
 var errNotStaticRequest = errors.New("request not a static file request")
 
+/*
+	处理静态资源
+*/
 func serverStaticRouter(ctx *context.Context) {
 	if ctx.Input.Method() != "GET" && ctx.Input.Method() != "HEAD" {
 		return
