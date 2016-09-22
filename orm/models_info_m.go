@@ -21,9 +21,12 @@ import (
 )
 
 // single model info
+// 每个model 的 信息
 type modelInfo struct {
-	pkg       string
-	name      string
+	pkg string
+	//表的名称
+	name string
+	//全名，指加上路径信息和表名称信息
 	fullName  string
 	table     string
 	model     interface{}

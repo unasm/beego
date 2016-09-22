@@ -41,11 +41,13 @@ func registerModel(prefix string, model interface{}) {
 
 	name := getFullName(typ)
 	if _, ok := modelCache.getByFN(name); ok {
+		//每一个model 只注册一次，防止多次注册
 		fmt.Printf("<orm.RegisterModel> model `%s` repeat register, must be unique\n", name)
 		os.Exit(2)
 	}
 
 	if _, ok := modelCache.get(table); ok {
+		//每一个model 只注册一次，防止多次注册
 		fmt.Printf("<orm.RegisterModel> table name `%s` repeat register, must be unique\n", table)
 		os.Exit(2)
 	}
@@ -306,6 +308,7 @@ func RegisterModel(models ...interface{}) {
 // RegisterModelWithPrefix register models with a prefix
 func RegisterModelWithPrefix(prefix string, models ...interface{}) {
 	if modelCache.done {
+		//也就是 注册 数据库model  必须放在init里面
 		panic(fmt.Errorf("RegisterModel must be run before BootStrap"))
 	}
 
