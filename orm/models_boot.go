@@ -27,6 +27,7 @@ import (
 func registerModel(prefix string, model interface{}) {
 	val := reflect.ValueOf(model)
 	ind := reflect.Indirect(val)
+	//typ 的值如 orm.DataNull
 	typ := ind.Type()
 
 	if val.Kind() != reflect.Ptr {

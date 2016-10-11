@@ -25,17 +25,25 @@ var errSkipField = errors.New("skip field")
 
 // field info collection
 type fields struct {
-	pk            *fieldInfo
-	columns       map[string]*fieldInfo
-	fields        map[string]*fieldInfo
+	// 主键的 字段信息
+	pk *fieldInfo
+
+	// 数据库字段 到具体字段的 映射
+	columns map[string]*fieldInfo
+
+	// Id, Ip 数据库 字段的首字母大写
+	fields map[string]*fieldInfo
+
+	//ip，id 等，key 应该是 数据库字段的名称
 	fieldsLow     map[string]*fieldInfo
 	fieldsByType  map[int][]*fieldInfo
 	fieldsRel     []*fieldInfo
 	fieldsReverse []*fieldInfo
 	fieldsDB      []*fieldInfo
 	rels          []*fieldInfo
-	orders        []string
-	dbcols        []string
+	// 具体的数据库 每一列的字段名称， way,dim,reason 等
+	orders []string
+	dbcols []string
 }
 
 // add field info
@@ -162,6 +170,8 @@ func newFieldInfo(mi *modelInfo, field reflect.Value, sf reflect.StructField, mN
 		}
 	}
 
+	//sf.Tag的值 orm:"digits(8);decimals(4);null"
+	// defaultStructTagName 是orm ，也就是获取orm 相关的字符串中的值,处理orm
 	parseStructTag(sf.Tag.Get(defaultStructTagName), &attrs, &tags)
 
 	if _, ok := attrs["-"]; ok {

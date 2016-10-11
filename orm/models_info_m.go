@@ -23,17 +23,28 @@ import (
 // single model info
 // 每个model 的 信息
 type modelInfo struct {
+	//security/models/ipModel
 	pkg string
-	//表的名称
+
+	//数据 type 的名称, 比如Rule
 	name string
-	//全名，指加上路径信息和表名称信息
-	fullName  string
-	table     string
-	model     interface{}
-	fields    *fields
+
+	//全名，指加上路径信息和表名称信息,security/models/ipModel.Black
+	fullName string
+
+	//数据库表名称 rule
+	table string
+
+	model  interface{}
+	fields *fields
+
+	// true false, 含义不明
 	manual    bool
 	addrField reflect.Value
-	uniques   []string
+
+	//不明，uniques空数组
+	uniques []string
+	//不明
 	isThrough bool
 }
 
@@ -65,12 +76,15 @@ func addModelFields(info *modelInfo, ind reflect.Value, mName string, index []in
 
 	for i := 0; i < ind.NumField(); i++ {
 		field := ind.Field(i)
+		//sf的值
+		//{Text  string orm:"type(text)" 32 [3] false}
 		sf = ind.Type().Field(i)
 		if sf.PkgPath != "" {
 			continue
 		}
 		// add anonymous struct fields
 		if sf.Anonymous {
+			//是否是匿名的，处理树状struct
 			addModelFields(info, field, mName+"."+sf.Name, append(index, i))
 			continue
 		}

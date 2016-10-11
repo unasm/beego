@@ -101,17 +101,18 @@ func (ac *_dbCache) getDefault() (al *alias) {
 	return
 }
 
+//存储了 数据库的基本信息
 type alias struct {
-	Name         string
-	Driver       DriverType
-	DriverName   string
-	DataSource   string
-	MaxIdleConns int
-	MaxOpenConns int
-	DB           *sql.DB
+	Name         string     //数据库的名称, 如default
+	Driver       DriverType //数据库驱动类型，1 是mysql 2....
+	DriverName   string     //数据库驱动的名称，mysql
+	DataSource   string     //dsn 连接 root:@/orm_test?charset=utf8
+	MaxIdleConns int        //最大限制最大连接数，比如20
+	MaxOpenConns int        //最大打开的连接数据 0
+	DB           *sql.DB    //数据库的连接
 	DbBaser      dbBaser
 	TZ           *time.Location
-	Engine       string
+	Engine       string // INNODB
 }
 
 func detectTZ(al *alias) {

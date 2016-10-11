@@ -89,8 +89,9 @@ type ParamsList []interface{}
 
 type orm struct {
 	alias *alias
-	db    dbQuerier
-	isTx  bool
+	//这里实际存储的是 *sql.DB 的类型，也就是数据库的连接
+	db   dbQuerier
+	isTx bool
 }
 
 var _ Ormer = new(orm)

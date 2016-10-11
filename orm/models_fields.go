@@ -21,6 +21,7 @@ import (
 )
 
 // Define the Type enum
+//一堆多，多对一的映射关系
 const (
 	TypeBooleanField = 1 << iota
 	TypeCharField

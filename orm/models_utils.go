@@ -32,6 +32,7 @@ func getTableName(val reflect.Value) string {
 	ind := reflect.Indirect(val)
 	fun := val.MethodByName("TableName")
 	if fun.IsValid() {
+		//只有一处调用了这里，IsValid为false
 		vals := fun.Call([]reflect.Value{})
 		if len(vals) > 0 {
 			val := vals[0]
@@ -40,6 +41,7 @@ func getTableName(val reflect.Value) string {
 			}
 		}
 	}
+	// 返回 type的名称，比如Rule 之类的
 	return snakeString(ind.Type().Name())
 }
 

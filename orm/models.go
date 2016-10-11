@@ -58,14 +58,18 @@ var (
 // model info collection
 type _modelCache struct {
 	sync.RWMutex
-	orders    []string
-	cache     map[string]*modelInfo
+	orders []string
+	// cache 表名称(rule)与table之间的映射，比如rule 与table 的映射, 比如 user_data
+	cache map[string]*modelInfo
+	//cacheBy Full Name, 根据 全名找到 对应的model  信息
+	//比如 ： github.com/astaxie/beego/orm.DataCustom
 	cacheByFN map[string]*modelInfo
 	done      bool
 }
 
 // get all model info
 func (mc *_modelCache) all() map[string]*modelInfo {
+	//为什么不是直接返回mc.cache的地址呢？因为是私有变量？？
 	m := make(map[string]*modelInfo, len(mc.cache))
 	for k, v := range mc.cache {
 		m[k] = v
