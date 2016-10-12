@@ -90,7 +90,8 @@ type ParamsList []interface{}
 type orm struct {
 	alias *alias
 	//这里实际存储的是 *sql.DB 的类型，也就是数据库的连接
-	db   dbQuerier
+	db dbQuerier
+	//是否处理事务中
 	isTx bool
 }
 

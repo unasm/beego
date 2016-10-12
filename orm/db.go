@@ -264,6 +264,11 @@ func (d *dbBase) collectFieldValue(mi *modelInfo, fi *fieldInfo, ind reflect.Val
 }
 
 // create insert sql preparation statement object.
+/*
+@params q		数据库的连接
+@params	 mi		要insert的model 信息
+@params	 ind	虽然是反射类型的，但是是要插入的值
+*/
 func (d *dbBase) PrepareInsert(q dbQuerier, mi *modelInfo) (stmtQuerier, string, error) {
 	Q := d.ins.TableQuote()
 
@@ -358,6 +363,7 @@ func (d *dbBase) Read(q dbQuerier, mi *modelInfo, ind reflect.Value, tz *time.Lo
 		}
 		return err
 	}
+	//创建一个 指定的类型的结构体,各种值都是空
 	elm := reflect.New(mi.addrField.Elem().Type())
 	mind := reflect.Indirect(elm)
 	d.setColsValues(mi, &mind, mi.fields.dbcols, refs, tz)
@@ -1150,6 +1156,7 @@ func (d *dbBase) GenerateOperatorLeftCol(*fieldInfo, string, *string) {
 }
 
 // set values to struct column.
+// 通过interface的方式，从数据库获取数值，然后通过反射的方式转化成具体的value
 func (d *dbBase) setColsValues(mi *modelInfo, ind *reflect.Value, cols []string, values []interface{}, tz *time.Location) {
 	for i, column := range cols {
 		val := reflect.Indirect(reflect.ValueOf(values[i])).Interface()
@@ -1163,6 +1170,7 @@ func (d *dbBase) setColsValues(mi *modelInfo, ind *reflect.Value, cols []string,
 			panic(fmt.Errorf("Raw value: `%v` %s", val, err.Error()))
 		}
 
+		//设置filed的值 为数据库的真实值value, fi 是 filed 信息
 		_, err = d.setFieldValue(fi, value, field)
 
 		if err != nil {

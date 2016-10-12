@@ -43,6 +43,7 @@ type fields struct {
 	rels          []*fieldInfo
 	// 具体的数据库 每一列的字段名称， way,dim,reason 等
 	orders []string
+	// 数据库列的名称，[id boolean char text j_s_o_n jsonb time date datetime byte rune int int8 int16 int32 int64 uint uint8 uint16 uint32 uint64 float32 float64 decimal]
 	dbcols []string
 }
 
@@ -109,8 +110,12 @@ func newFields() *fields {
 
 // single field info
 type fieldInfo struct {
-	mi                  *modelInfo
-	fieldIndex          []int
+	//field 反向的归属model位置
+	mi *modelInfo
+	// 一般情况下为 单个值的 数组，表示该field在结构体中的位置
+	fieldIndex []int
+
+	//字段类型, models_fields.go 中约定的Type类型，在插入或者读出的时候，用于转换为对应的类型
 	fieldType           int
 	dbcol               bool
 	inModel             bool

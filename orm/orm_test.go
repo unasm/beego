@@ -106,6 +106,9 @@ func AssertNot(a interface{}, args ...interface{}) error {
 	return nil
 }
 
+/*
+	获得错误 代码的上下文信息
+*/
 func getCaller(skip int) string {
 	pc, file, line, _ := runtime.Caller(skip)
 	fun := runtime.FuncForPC(pc)

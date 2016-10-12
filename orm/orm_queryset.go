@@ -55,6 +55,7 @@ func ColValue(opt operator, value interface{}) interface{} {
 
 // real query struct
 type querySet struct {
+	//想要query的model
 	mi       *modelInfo
 	cond     *Condition
 	related  []string
@@ -64,7 +65,8 @@ type querySet struct {
 	groups   []string
 	orders   []string
 	distinct bool
-	orm      *orm
+	//查询的orm
+	orm *orm
 }
 
 var _ QuerySeter = new(querySet)
